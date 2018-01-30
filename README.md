@@ -1,2 +1,2 @@
-# measure-api-image
-Instantiation of measure-api along with its respective build and deploy scripts reside here
+# measurement-api-image
+Instantiation of measurement-api along with its respective build and deploy scripts reside here
