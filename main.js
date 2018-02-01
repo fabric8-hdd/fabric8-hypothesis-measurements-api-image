@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: true }))
 var port = process.env.APP_PORT || 9090
 var routes = require("./node_modules/measurement-api/src/api/routes.js")
 
-routes(app)
+routes(app, process.env.ROUTE_PATH + process.env.ROUTE_PREFIX)
 
 //Setting up server
 var server = app.listen(port, function () {

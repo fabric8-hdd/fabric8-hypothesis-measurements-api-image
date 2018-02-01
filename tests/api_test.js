@@ -1,13 +1,18 @@
+process.env.ROUTE_PREFIX="/api/v1.0"
+process.env.ROUTE_PATH="/measurement"
+
 var server   = require("../main"),
 	chai     = require("chai"),
 	chaiHTTP = require("chai-http"),
-	should   = chai.should()
+	should   = chai.should(),
+	route_path = process.env.ROUTE_PATH || "/measurement",
+	route_prefix = process.env.ROUTE_PREFIX
 
 chai.use(chaiHTTP)
 
 describe("Test manager api", function() {
 
-	describe("POST to /api/v1.0/measurements", () => {
+	describe("POST /measurements", () => {
 		let stat = {
 			scout_id : "a4e1b0cf-2a08-4297-83f3-4db896d7e0fb",
 			data : [{date:"1/1/2", value:1234}],
@@ -27,7 +32,7 @@ describe("Test manager api", function() {
 
 		it(" should return 200", function(done){
 			chai.request(server)
-				.post("/api/v1.0/measurements")
+				.post(route_path + route_prefix + "/measurements")
 				.set("Content-Type", "application/json")
 				.send(stat)
 				.end(function(err, res) {
@@ -37,10 +42,10 @@ describe("Test manager api", function() {
 		})
 	})
 
-	describe("POST to /api/v1.0/measurements", () => {
-		it("should return 400", function(done){
+	describe("POST /measurements", () => {
+		it(" should return 400", function(done){
 			chai.request(server)
-				.post("/api/v1.0/measurements")
+				.post(route_path + route_prefix + "/measurements")
 				.set("Content-Type", "application/json")
 				.send({})
 				.end(function(err, res) {
@@ -54,10 +59,10 @@ describe("Test manager api", function() {
 
 describe("Test readiness and liveness api",function(){
 	
-	describe("Get to /api/v1.0/readiness", () => {
+	describe("GET /readiness", () => {
 		it(" should return 200", function(done){
 			chai.request(server)
-				.get("/api/v1.0/readiness")
+				.get(route_path + route_prefix + "/readiness")
 				.end(function(err, res) {
 					res.should.have.status(200)
 					done()
@@ -65,10 +70,10 @@ describe("Test readiness and liveness api",function(){
 		})
 	})
 
-	describe("Get to /api/v1.0/liveness", () => {
+	describe("GET /liveness", () => {
 		it(" should return 200", function(done){
 			chai.request(server)
-				.get("/api/v1.0/liveness")
+				.get(route_path + route_prefix + "/liveness")
 				.end(function(err, res) {
 					res.should.have.status(200)
 					done()
@@ -76,4 +81,3 @@ describe("Test readiness and liveness api",function(){
 		})
 	})
 })
-
