@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: osio-hdd-measurement-api
+  template: osio-hdd-measurements-api
 metadata:
-  name: osio-hdd-measurement-api
+  name: osio-hdd-measurements-api
   annotations:
     description: ${APP_NAME}
 objects:
@@ -31,27 +31,27 @@ objects:
             imagePullPolicy: Always
             name: ${APP_NAME}
             env:
-            - name: HDD_MEASUREMENT_API_PORT
-              value: ${HDD_MEASUREMENT_API_PORT}
+            - name: HDD_MEASUREMENTS_API_PORT
+              value: ${HDD_MEASUREMENTS_API_PORT}
             - name: ROUTE_PATH
               value: ${ROUTE_PATH}
             - name: ROUTE_PREFIX
               value: ${ROUTE_PREFIX}
             ports:
-            - containerPort: ${{HDD_MEASUREMENT_API_PORT}}
+            - containerPort: ${{HDD_MEASUREMENTS_API_PORT}}
               protocol: TCP
             readinessProbe:
               httpGet:
-                path: /measurement/api/v1.0/readiness
-                port: ${{HDD_MEASUREMENT_API_PORT}}
+                path: /measurements/api/v1.0/readiness
+                port: ${{HDD_MEASUREMENTS_API_PORT}}
                 scheme: HTTP
               initialDelaySeconds: 30
               periodSeconds: 60
               timeoutSeconds: 10
             livenessProbe:
               httpGet:
-                path: /measurement/api/v1.0/liveness
-                port: ${{HDD_MEASUREMENT_API_PORT}}
+                path: /measurements/api/v1.0/liveness
+                port: ${{HDD_MEASUREMENTS_API_PORT}}
                 scheme: HTTP
               initialDelaySeconds: 30
               periodSeconds: 60
@@ -75,10 +75,10 @@ objects:
     name: ${APP_NAME}
   spec:
     ports:
-      - name: hdd-measurement-api-tcp
-        port: ${{HDD_MEASUREMENT_API_PORT}}
+      - name: hdd-measurements-api-tcp
+        port: ${{HDD_MEASUREMENTS_API_PORT}}
         protocol: TCP
-        targetPort: ${{HDD_MEASUREMENT_API_PORT}}
+        targetPort: ${{HDD_MEASUREMENTS_API_PORT}}
     selector:
       deploymentconfig: ${APP_NAME}
 - apiVersion: v1
@@ -89,7 +89,7 @@ objects:
       template: ${APP_NAME}
     name: ${APP_NAME}
   spec:
-    path: /measurement
+    path: /measurements
     port:
       targetPort: ${APP_NAME}
     to:
@@ -97,16 +97,16 @@ objects:
       name: ${APP_NAME}
 
 parameters:
-- name: HDD_MEASUREMENT_API_PORT
-  description: Port number that measurement-api service will be exposed on.
+- name: HDD_MEASUREMENTS_API_PORT
+  description: Port number that measurements-api service will be exposed on.
   required: true
   value: "8888"
-- name: HDD_MEASUREMENT_SERVICE_TARGET_PORT
-  description: Port number that measurement-api service will map to.
+- name: HDD_MEASUREMENTS_SERVICE_TARGET_PORT
+  description: Port number that measurements-api service will map to.
   required: true
   value: "8888"
-- name: HDD_MEASUREMENT_API_HOSTNAME
-  description: Parameterised hostname route for the measurement-api service.
+- name: HDD_MEASUREMENTS_API_HOSTNAME
+  description: Parameterised hostname route for the measurements-api service.
   required: false
 - name: IMAGE_TAG
   description: Image tag
@@ -117,7 +117,7 @@ parameters:
   description: Name of the app
   displayName: Name of the app
   required: true
-  value: "osio-hdd-measurement-api"
+  value: "osio-hdd-measurements-api"
 - name: IMAGE_NAME
   description: Image name
   displayName: Image name
@@ -127,7 +127,7 @@ parameters:
   description: Route path
   displayName: Route path
   required: true
-  value: "/measurement"
+  value: "/measurements"
 - name: ROUTE_PREFIX
   description: Route prefix
   displayName: Route prefix
