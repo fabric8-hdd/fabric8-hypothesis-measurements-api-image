@@ -1,11 +1,11 @@
 process.env.ROUTE_PREFIX="/api/v1.0"
-process.env.ROUTE_PATH="/measurement"
+process.env.ROUTE_PATH="/measurements"
 
 var server   = require("../main"),
 	chai     = require("chai"),
 	chaiHTTP = require("chai-http"),
 	should   = chai.should(),
-	route_path = process.env.ROUTE_PATH || "/measurement",
+	route_path = process.env.ROUTE_PATH || "/measurements",
 	route_prefix = process.env.ROUTE_PREFIX
 
 chai.use(chaiHTTP)
