@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: osio-hdd-measurements-api
+  template: osio-hypothesis-measurements-api
 metadata:
-  name: osio-hdd-measurements-api
+  name: osio-hypothesis-measurements-api
   annotations:
     description: ${APP_NAME}
 objects:
@@ -26,24 +26,23 @@ objects:
       spec:
         containers:
           - image: >-
-              #registry.devshift.net/fabric8-hdd/${IMAGE_NAME}:${IMAGE_TAG}
-              registry.centos.org/fabric8-hdd/${IMAGE_NAME}:${IMAGE_TAG}
+              registry.devshift.net/fabric8-hypothesis/${IMAGE_NAME}:${IMAGE_TAG}
             imagePullPolicy: Always
             name: ${APP_NAME}
             env:
-            - name: HDD_MEASUREMENTS_API_PORT
-              value: ${HDD_MEASUREMENTS_API_PORT}
+            - name: HYPOTHESIS_MEASUREMENTS_API_PORT
+              value: ${HYPOTHESIS_MEASUREMENTS_API_PORT}
             - name: ROUTE_PATH
               value: ${ROUTE_PATH}
             - name: ROUTE_PREFIX
               value: ${ROUTE_PREFIX}
             ports:
-            - containerPort: ${{HDD_MEASUREMENTS_API_PORT}}
+            - containerPort: ${{HYPOTHESIS_MEASUREMENTS_API_PORT}}
               protocol: TCP
             readinessProbe:
               httpGet:
                 path: /measurements/api/v1.0/readiness
-                port: ${{HDD_MEASUREMENTS_API_PORT}}
+                port: ${{HYPOTHESIS_MEASUREMENTS_API_PORT}}
                 scheme: HTTP
               initialDelaySeconds: 30
               periodSeconds: 60
@@ -51,7 +50,7 @@ objects:
             livenessProbe:
               httpGet:
                 path: /measurements/api/v1.0/liveness
-                port: ${{HDD_MEASUREMENTS_API_PORT}}
+                port: ${{HYPOTHESIS_MEASUREMENTS_API_PORT}}
                 scheme: HTTP
               initialDelaySeconds: 30
               periodSeconds: 60
@@ -75,10 +74,10 @@ objects:
     name: ${APP_NAME}
   spec:
     ports:
-      - name: hdd-measurements-api-tcp
-        port: ${{HDD_MEASUREMENTS_API_PORT}}
+      - name: hypothesis-measurements-api-tcp
+        port: ${{HYPOTHESIS_MEASUREMENTS_API_PORT}}
         protocol: TCP
-        targetPort: ${{HDD_MEASUREMENTS_API_PORT}}
+        targetPort: ${{HYPOTHESIS_MEASUREMENTS_API_PORT}}
     selector:
       deploymentconfig: ${APP_NAME}
 - apiVersion: v1
@@ -97,15 +96,15 @@ objects:
       name: ${APP_NAME}
 
 parameters:
-- name: HDD_MEASUREMENTS_API_PORT
+- name: HYPOTHESIS_MEASUREMENTS_API_PORT
   description: Port number that measurements-api service will be exposed on.
   required: true
   value: "8888"
-- name: HDD_MEASUREMENTS_SERVICE_TARGET_PORT
+- name: HYPOTHESIS_MEASUREMENTS_SERVICE_TARGET_PORT
   description: Port number that measurements-api service will map to.
   required: true
   value: "8888"
-- name: HDD_MEASUREMENTS_API_HOSTNAME
+- name: HYPOTHESIS_MEASUREMENTS_API_HOSTNAME
   description: Parameterised hostname route for the measurements-api service.
   required: false
 - name: IMAGE_TAG
@@ -117,12 +116,12 @@ parameters:
   description: Name of the app
   displayName: Name of the app
   required: true
-  value: "osio-hdd-measurements-api"
+  value: "osio-hypothesis-measurements-api"
 - name: IMAGE_NAME
   description: Image name
   displayName: Image name
   required: true
-  value: "openshift-hdd-manager-api"
+  value: "openshift-hypothesis-manager-api"
 - name: ROUTE_PATH
   description: Route path
   displayName: Route path
